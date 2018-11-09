@@ -1,3 +1,3 @@
 # Integers Modulo N
 
-std::uint64_t wrapper for arithmetic modulo N.
+Header-only wrapper class for arithmetic modulo N using std::uint64_t.
