@@ -101,7 +101,7 @@ namespace math_nerd
                     {
                         inv = impl_details::inverse_of<N>(element_);
                     }
-                    catch(std::invalid_argument const &)
+                    catch( std::invalid_argument const & )
                     {
                         throw;
                     }
