@@ -807,7 +807,7 @@ namespace math_nerd
         std::istream &operator>>(std::istream &is, int_mod<N> &rhs)
         {
             is >> rhs.element_;
-            num.element_ %= N;
+            rhs.element_ %= N;
             return is;
         }
 
