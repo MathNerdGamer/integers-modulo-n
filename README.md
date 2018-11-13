@@ -15,7 +15,7 @@ int main()
     
     std::cout << a + 7 << '\n';
     
-    return 0;
+    return EXIT_SUCCESS;
 }
 ```
 
