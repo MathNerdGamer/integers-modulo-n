@@ -19,4 +19,4 @@ int main()
 }
 ```
 
-Outputs ```2```.
+Outputs `2`.
