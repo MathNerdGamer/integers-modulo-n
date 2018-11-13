@@ -13,7 +13,7 @@ int main()
 {
     int_mod<17> a{ 12 };
     
-    std::cout << a+7 << '\n';
+    std::cout << a + 7 << '\n';
     
     return 0;
 }
