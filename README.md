@@ -1,6 +1,6 @@
 # Integers Modulo N
 
-Header-only wrapper class for arithmetic modulo N using std::uint64_t.
+Header-only wrapper class for arithmetic modulo N using std::int64_t.
 
 # Usage
 Here's a basic example:
