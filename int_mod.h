@@ -27,7 +27,7 @@ SOFTWARE.
 #define INT_MOD_H
 
 /** \file int_mod.h
-    \brief std::uint64_t wrapper for arithmetic modulo N.
+    \brief std::int64_t wrapper for arithmetic modulo N.
  */
 #include <array>
 #include <cstdint>
