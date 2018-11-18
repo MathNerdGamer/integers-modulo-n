@@ -483,9 +483,12 @@ namespace math_nerd
         {
             rhs = impl_details::standard_modulo<N>(rhs);
 
-            if( INT64_MAX - rhs < element_ )
-            {   // Signed integer overflow is UB
-                rhs -= N; // Same as subtracting by 0 modulo N.
+            if constexpr( INT64_MAX / 2 <= N )
+            {   // Overflow check not needed for small modulus.
+                if( INT64_MAX - rhs < element_ )
+                {   // Signed integer overflow is UB
+                    rhs -= N; // Same as subtracting by 0 modulo N.
+                }
             }
 
             element_ += rhs;
@@ -517,14 +520,17 @@ namespace math_nerd
         {
             rhs = impl_details::standard_modulo<N>(rhs);
 
-            if( INT64_MAX / rhs < element_ )
-            {   // Signed integer overflow is UB
-                s64 old_element = element_;
-                while( INT64_MAX / rhs < element_ )
-                {
-                    element_ += old_element;
-                    element_ %= N;
-                    rhs -= 1;
+            if constexpr( INT64_MAX / N <= N )
+            {   // Overflow check not needed for small modulus.
+                if( INT64_MAX / rhs < element_ )
+                {   // Signed integer overflow is UB
+                    s64 old_element = element_;
+                    while( INT64_MAX / rhs < element_ )
+                    {
+                        element_ += old_element;
+                        element_ %= N;
+                        rhs -= 1;
+                    }
                 }
             }
 
@@ -547,14 +553,17 @@ namespace math_nerd
                 throw;
             }
 
-            if( INT64_MAX / rhs < element_ )
-            {   // Signed integer overflow is UB
-                s64 old_element = element_;
-                while( INT64_MAX / rhs < element_ )
-                {
-                    element_ += old_element;
-                    element_ %= N;
-                    rhs -= 1;
+            if constexpr( INT64_MAX / N <= N )
+            {   // Overflow check not needed for small modulus.
+                if( INT64_MAX / rhs < element_ )
+                {   // Signed integer overflow is UB
+                    s64 old_element = element_;
+                    while( INT64_MAX / rhs < element_ )
+                    {
+                        element_ += old_element;
+                        element_ %= N;
+                        rhs -= 1;
+                    }
                 }
             }
             
