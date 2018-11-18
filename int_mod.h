@@ -46,47 +46,47 @@ namespace math_nerd
      */
     namespace int_mod
     {
-        /** \name Unsigned 64-bit integer
+        /** \name Signed 64-bit integer
          */
-        using u64 = std::uint64_t;
+        using s64 = std::int64_t;
 
         /** \class int_mod<N>
-            \brief Wrapper for 64-bit unsigned integer for arithmetic modulo N.
+            \brief Wrapper for 64-bit integer for arithmetic modulo N.
          */
-        template <u64 N>
+        template <s64 N>
         class int_mod
         {
             static_assert(N > 1, "Modulus N of int_mod<N> must be at least 2.");
 
             private:
-                /** \property u64 element_
-                    \brief The unsigned integer which will be taken modulo N. Default initializes to 0.
+                /** \property s64 element_
+                    \brief The integer which will be taken modulo N. Default initializes to 0.
                  */
-                u64 element_{ 0 };
+                s64 element_{ 0 };
 
             public:
                 constexpr int_mod() = default;
 
-                constexpr int_mod(u64 num) noexcept
+                constexpr int_mod(s64 num) noexcept
                 {
-                    element_ = num;
+                    element_ = impl_details::standard_modulo<N>(num);
                     element_ %= N;
                 }
 
                 ~int_mod() = default;
 
-                /** \fn constexpr u64 modulus() const noexcept
+                /** \fn constexpr s64 modulus() const noexcept
                     \brief Returns the modulus N.
                  */
-                constexpr u64 modulus() const noexcept
+                constexpr s64 modulus() const noexcept
                 {
                     return N;
                 }
 
-                /** \fn constexpr u64 value() const noexcept
+                /** \fn constexpr s64 value() const noexcept
                     \brief Returns the stored value.
                  */
-                constexpr u64 value() const noexcept
+                constexpr s64 value() const noexcept
                 {
                     return element_;
                 }
@@ -94,9 +94,9 @@ namespace math_nerd
                 /** \fn constexpr inverse() const
                     \brief Returns the inverse modulo N of the stored value. Throws std::invalid_argument if not invertible.
                  */
-                constexpr u64 inverse() const
+                constexpr s64 inverse() const
                 {
-                    u64 inv; 
+                    s64 inv; 
                     try
                     {
                         inv = impl_details::inverse_of<N>(element_);
@@ -171,35 +171,35 @@ namespace math_nerd
                  */
                 int_mod<N> &operator%=(int_mod<N> const rhs);
 
-                /** \fn int_mod<N> &operator=(u64 const rhs) noexcept
+                /** \fn int_mod<N> &operator=(s64 rhs) noexcept
                     \brief Assigns rhs to element_ and reduces modulo N.
                  */
-                int_mod<N> &operator=(u64 const rhs) noexcept;
+                int_mod<N> &operator=(s64 rhs) noexcept;
 
-                /** \fn int_mod<N> &operator+=(u64 const rhs) noexcept
+                /** \fn int_mod<N> &operator+=(s64 rhs) noexcept
                     \brief Adds rhs to element_ and reduces modulo N.
                  */
-                int_mod<N> &operator+=(u64 const rhs) noexcept;
+                int_mod<N> &operator+=(s64 rhs) noexcept;
 
-                /** \fn int_mod<N> &operator-=(u64 const rhs) noexcept
+                /** \fn int_mod<N> &operator-=(s64 rhs) noexcept
                     \brief Subtracts rhs from element_ and reduces modulo N.
                  */
-                int_mod<N> &operator-=(u64 const rhs) noexcept;
+                int_mod<N> &operator-=(s64 rhs) noexcept;
 
-                /** \fn int_mod<N> &operator*=(u64 const rhs) noexcept
+                /** \fn int_mod<N> &operator*=(s64 rhs) noexcept
                     \brief Multiples rhs to element_ and reduces modulo N.
                  */
-                int_mod<N> &operator*=(u64 const rhs) noexcept;
+                int_mod<N> &operator*=(s64 rhs) noexcept;
 
-                /** \fn int_mod<N> &operator/=(u64 const rhs)
+                /** \fn int_mod<N> &operator/=(s64 rhs)
                     \brief Divides rhs, if invertible modulo N, from element_ and reduces modulo N. Throws std::invalid_argument if rhs is not invertible.
                  */
-                int_mod<N> &operator/=(u64 const rhs);
+                int_mod<N> &operator/=(s64 rhs);
 
-                /** \fn int_mod<N> &operator%=(u64 const rhs)
+                /** \fn int_mod<N> &operator%=(s64 rhs)
                     \brief Finds remainder of element_ when divided by rhs. Throws std::invalid_argument if rhs is zero.
                  */
-                int_mod<N> &operator%=(u64 const rhs);
+                int_mod<N> &operator%=(s64 rhs);
 
 
                 /** \name Comparison operators */
@@ -214,127 +214,127 @@ namespace math_nerd
                  */
                 constexpr bool operator!=(int_mod<N> const rhs) const noexcept;
                 
-                // u64 versions
-                /** \fn constexpr bool operator==(u64 const rhs) const noexcept
+                // s64 versions
+                /** \fn constexpr bool operator==(s64 rhs) const noexcept
                     \brief Compares the values and returns true if equal.
                  */
-                constexpr bool operator==(u64 const rhs) const noexcept;
+                constexpr bool operator==(s64 rhs) const noexcept;
                 
-                /** \fn constexpr bool operator!=(u64 const rhs) const noexcept
+                /** \fn constexpr bool operator!=(s64 rhs) const noexcept
                     \brief Compares the values and returns false if equal.
                  */
-                constexpr bool operator!=(u64 const rhs) const noexcept;
+                constexpr bool operator!=(s64 rhs) const noexcept;
 
                 /** \name Arithmetic operators */
                 // int_mod<N> versions
                 /** \fn constexpr constexpr friend int_mod<N> operator+(int_mod<N> lhs, int_mod<N> const rhs) noexcept
                     \brief Returns the result of adding two int_mod<N>.
                  */
-                template <u64 N>
+                template <s64 N>
                 constexpr friend int_mod<N> operator+(int_mod<N> lhs, int_mod<N> const rhs) noexcept;
 
                 /** \fn constexpr friend int_mod<N> operator-(int_mod<N> lhs, int_mod<N> const rhs) noexcept
                     \brief Returns the result of subtracting two int_mod<N>.
                  */
-                template <u64 N>
+                template <s64 N>
                 constexpr friend int_mod<N> operator-(int_mod<N> lhs, int_mod<N> const rhs) noexcept;
 
                 /** \fn constexpr friend int_mod<N> operator*(int_mod<N> lhs, int_mod<N> const rhs) noexcept
                     \brief Returns the result of multiplying two int_mod<N>.
                  */
-                template <u64 N>
+                template <s64 N>
                 constexpr friend int_mod<N> operator*(int_mod<N> lhs, int_mod<N> const rhs) noexcept;
 
                 /** \fn constexpr friend int_mod<N> operator/(int_mod<N> lhs, int_mod<N> const rhs)
                     \brief Returns the result of dividing two int_mod<N>. Throws std::invalid_argument if rhs is not invertible.
                  */
-                template <u64 N>
+                template <s64 N>
                 friend int_mod<N> operator/(int_mod<N> lhs, int_mod<N> const rhs);
 
                 /** \fn constexpr friend int_mod<N> operator%(int_mod<N> lhs, int_mod<N> const rhs)
                     \brief Returns the remainder when dividing two int_mod<N>. Throws std::invalid_argument if rhs is zero.
                  */
-                template <u64 N>
+                template <s64 N>
                 friend int_mod<N> operator%(int_mod<N> lhs, int_mod<N> const rhs);
                 
-                // Right-u64 versions
-                /** \fn constexpr constexpr friend int_mod<N> operator+(int_mod<N> lhs, u64 const rhs) noexcept
-                    \brief Returns the result of adding int_mod<N> and u64.
+                // Right-s64 versions
+                /** \fn constexpr constexpr friend int_mod<N> operator+(int_mod<N> lhs, s64 rhs) noexcept
+                    \brief Returns the result of adding int_mod<N> and s64.
                  */
-                template <u64 N>
-                constexpr friend int_mod<N> operator+(int_mod<N> lhs, u64 const rhs) noexcept;
+                template <s64 N>
+                constexpr friend int_mod<N> operator+(int_mod<N> lhs, s64 rhs) noexcept;
 
-                /** \fn constexpr constexpr friend int_mod<N> operator-(int_mod<N> lhs, u64 const rhs) noexcept
-                    \brief Returns the result of subtracting int_mod<N> by u64.
+                /** \fn constexpr constexpr friend int_mod<N> operator-(int_mod<N> lhs, s64 rhs) noexcept
+                    \brief Returns the result of subtracting int_mod<N> by s64.
                  */
-                template <u64 N>
-                constexpr friend int_mod<N> operator-(int_mod<N> lhs, u64 const rhs) noexcept;
+                template <s64 N>
+                constexpr friend int_mod<N> operator-(int_mod<N> lhs, s64 rhs) noexcept;
 
-                /** \fn constexpr constexpr friend int_mod<N> operator*(int_mod<N> lhs, u64 const rhs) noexcept
-                    \brief Returns the result of multiplying int_mod<N> by u64.
+                /** \fn constexpr constexpr friend int_mod<N> operator*(int_mod<N> lhs, s64 rhs) noexcept
+                    \brief Returns the result of multiplying int_mod<N> by s64.
                  */
-                template <u64 N>
-                constexpr friend int_mod<N> operator*(int_mod<N> lhs, u64 const rhs) noexcept;
+                template <s64 N>
+                constexpr friend int_mod<N> operator*(int_mod<N> lhs, s64 rhs) noexcept;
 
-                /** \fn constexpr friend int_mod<N> operator/(int_mod<N> lhs, u64 const rhs)
-                    \brief Returns the result of dividing int_mod<N> by u64. Throws std::invalid_argument if rhs is not invertible.
+                /** \fn constexpr friend int_mod<N> operator/(int_mod<N> lhs, s64 rhs)
+                    \brief Returns the result of dividing int_mod<N> by s64. Throws std::invalid_argument if rhs is not invertible.
                  */
-                template <u64 N>
-                friend int_mod<N> operator/(int_mod<N> lhs, u64 const rhs);
+                template <s64 N>
+                friend int_mod<N> operator/(int_mod<N> lhs, s64 rhs);
 
-                /** \fn constexpr friend int_mod<N> operator%(int_mod<N> lhs, u64 const rhs)
-                    \brief Returns the remainder when dividing int_mod<N> by u64. Throws std::invalid_argument if rhs is zero.
+                /** \fn constexpr friend int_mod<N> operator%(int_mod<N> lhs, s64 rhs)
+                    \brief Returns the remainder when dividing int_mod<N> by s64. Throws std::invalid_argument if rhs is zero.
                  */
-                template <u64 N>
-                friend int_mod<N> operator%(int_mod<N> lhs, u64 const rhs);
+                template <s64 N>
+                friend int_mod<N> operator%(int_mod<N> lhs, s64 rhs);
 
-                // Left-u64 versions
-                /** \fn constexpr constexpr friend int_mod<N> operator+(u64 const lhs, int_mod<N> rhs) noexcept
-                \brief Returns the result of adding int_mod<N> and u64.
+                // Left-s64 versions
+                /** \fn constexpr constexpr friend int_mod<N> operator+(s64 const lhs, int_mod<N> rhs) noexcept
+                \brief Returns the result of adding int_mod<N> and s64.
                 */
-                template <u64 N>
-                constexpr friend int_mod<N> operator+(u64 const lhs, int_mod<N> rhs) noexcept;
+                template <s64 N>
+                constexpr friend int_mod<N> operator+(s64 const lhs, int_mod<N> rhs) noexcept;
 
-                /** \fn constexpr constexpr friend int_mod<N> operator-(u64 const lhs, int_mod<N> rhs) noexcept
-                \brief Returns the result of subtracting int_mod<N> by u64.
+                /** \fn constexpr constexpr friend int_mod<N> operator-(s64 const lhs, int_mod<N> rhs) noexcept
+                \brief Returns the result of subtracting int_mod<N> by s64.
                 */
-                template <u64 N>
-                constexpr friend int_mod<N> operator-(u64 const lhs, int_mod<N> rhs) noexcept;
+                template <s64 N>
+                constexpr friend int_mod<N> operator-(s64 const lhs, int_mod<N> rhs) noexcept;
 
-                /** \fn constexpr constexpr friend int_mod<N> operator*(u64 const lhs, int_mod<N> rhs) noexcept
-                \brief Returns the result of multiplying int_mod<N> by u64.
+                /** \fn constexpr constexpr friend int_mod<N> operator*(s64 const lhs, int_mod<N> rhs) noexcept
+                \brief Returns the result of multiplying int_mod<N> by s64.
                 */
-                template <u64 N>
-                constexpr friend int_mod<N> operator*(u64 const lhs, int_mod<N> rhs) noexcept;
+                template <s64 N>
+                constexpr friend int_mod<N> operator*(s64 const lhs, int_mod<N> rhs) noexcept;
 
-                /** \fn constexpr friend int_mod<N> operator/(u64 const lhs, int_mod<N> rhs)
-                \brief Returns the result of dividing int_mod<N> by u64. Throws std::invalid_argument if rhs is not invertible.
+                /** \fn constexpr friend int_mod<N> operator/(s64 const lhs, int_mod<N> rhs)
+                \brief Returns the result of dividing int_mod<N> by s64. Throws std::invalid_argument if rhs is not invertible.
                 */
-                template <u64 N>
-                friend int_mod<N> operator/(u64 const lhs, int_mod<N> rhs);
+                template <s64 N>
+                friend int_mod<N> operator/(s64 const lhs, int_mod<N> rhs);
 
-                /** \fn constexpr friend int_mod<N> operator%(u64 const lhs, int_mod<N> rhs)
-                \brief Returns the remainder when dividing int_mod<N> by u64. Throws std::invalid_argument if rhs is zero.
+                /** \fn constexpr friend int_mod<N> operator%(s64 const lhs, int_mod<N> rhs)
+                \brief Returns the remainder when dividing int_mod<N> by s64. Throws std::invalid_argument if rhs is zero.
                 */
-                template <u64 N>
-                friend int_mod<N> operator%(u64 const lhs, int_mod<N> rhs);
+                template <s64 N>
+                friend int_mod<N> operator%(s64 const lhs, int_mod<N> rhs);
 
                 /** \name I/O operators */
                 /** \fn friend std::ostream &operator<<(std::ostream &os, int_mod<N> const &rhs)
                     \brief Outputs the value stored in rhs to the output stream. Returns reference to the output stream for further output.
                  */
-                template <u64 N>
+                template <s64 N>
                 friend std::ostream &operator<<(std::ostream &os, int_mod<N> const &rhs);
 
                 /** \fn friend std::istream &operator>>(std::istream &is, int_mod<N> &rhs)
                     \brief Outputs the value stored in rhs to the output stream. Returns reference to the output stream for further output.
                  */
-                template <u64 N>
+                template <s64 N>
                 friend std::istream &operator>>(std::istream &is, int_mod<N> &rhs);
         };
 
         // Increment/Decrement Operators
-        template <u64 N>
+        template <s64 N>
         int_mod<N> &int_mod<N>::operator++() noexcept
         {
             if( element_ == N - 1 )
@@ -349,7 +349,7 @@ namespace math_nerd
             return *this;
         }
 
-        template <u64 N>
+        template <s64 N>
         int_mod<N> int_mod<N>::operator++(int) noexcept
         {
             int_mod<N> tmp(*this);
@@ -357,7 +357,7 @@ namespace math_nerd
             return tmp;
         }
 
-        template <u64 N>
+        template <s64 N>
         int_mod<N> &int_mod<N>::operator--() noexcept
         {
             if( element_ == 0 )
@@ -372,7 +372,7 @@ namespace math_nerd
             return *this;
         }
 
-        template <u64 N>
+        template <s64 N>
         int_mod<N> int_mod<N>::operator--(int) noexcept
         {
             int_mod<N> tmp(*this);
@@ -381,13 +381,13 @@ namespace math_nerd
         }
 
         // Unary operators
-        template <u64 N>
+        template <s64 N>
         int_mod<N> int_mod<N>::operator+() const noexcept
         {
             return *this;
         }
 
-        template <u64 N>
+        template <s64 N>
         int_mod<N> int_mod<N>::operator-() const noexcept
         {
             return N - element_;
@@ -395,7 +395,7 @@ namespace math_nerd
 
         // Assignment operators
         // int_mod<N> versions
-        template<u64 N>
+        template<s64 N>
         int_mod<N> &int_mod<N>::operator=(int_mod<N> const rhs) noexcept
         {
             element_ = rhs.value();
@@ -403,7 +403,7 @@ namespace math_nerd
             return *this;
         }
 
-        template <u64 N>
+        template <s64 N>
         int_mod<N> &int_mod<N>::operator+=(int_mod<N> const rhs) noexcept
         {
             element_ += rhs.value();
@@ -412,7 +412,7 @@ namespace math_nerd
             return *this;
         }
 
-        template <u64 N>
+        template <s64 N>
         int_mod<N> &int_mod<N>::operator-=(int_mod<N> const rhs) noexcept
         {
             if( rhs.value() > element_ )
@@ -427,7 +427,7 @@ namespace math_nerd
             return *this;
         }
 
-        template <u64 N>
+        template <s64 N>
         int_mod<N> &int_mod<N>::operator*=(int_mod<N> const rhs) noexcept
         {
             element_ *= rhs.value();
@@ -436,7 +436,7 @@ namespace math_nerd
             return *this;
         }
 
-        template <u64 N>
+        template <s64 N>
         int_mod<N> &int_mod<N>::operator/=(int_mod<N> const rhs)
         {
             try
@@ -452,7 +452,7 @@ namespace math_nerd
             return *this;
         }
 
-        template <u64 N>
+        template <s64 N>
         int_mod<N> &int_mod<N>::operator%=(int_mod<N> const rhs)
         {
             if( rhs.value() != 0 )
@@ -467,63 +467,105 @@ namespace math_nerd
             return *this;
         }
 
-        // u64 versions
-        template <u64 N>
-        int_mod<N> &int_mod<N>::operator=(u64 const rhs) noexcept
+        // s64 versions
+        template <s64 N>
+        int_mod<N> &int_mod<N>::operator=(s64 rhs) noexcept
         {
-            element_ = rhs;
-            element_ %= N;
+            rhs = impl_details::standard_modulo<N>(rhs);
+            
+            element_ = rhs % N;
 
             return *this;
         }
 
-        template <u64 N>
-        int_mod<N> &int_mod<N>::operator+=(u64 const rhs) noexcept
+        template <s64 N>
+        int_mod<N> &int_mod<N>::operator+=(s64 rhs) noexcept
         {
+            rhs = impl_details::standard_modulo<N>(rhs);
+
+            if( INT64_MAX - rhs < element_ )
+            {   // Signed integer overflow is UB
+                rhs -= N; // Same as subtracting by 0 modulo N.
+            }
+
             element_ += rhs;
+
             element_ %= N;
 
             return *this;
         }
 
-        template <u64 N>
-        int_mod<N> &int_mod<N>::operator-=(u64 const rhs) noexcept
+        template <s64 N>
+        int_mod<N> &int_mod<N>::operator-=(s64 rhs) noexcept
         {
+            rhs = impl_details::standard_modulo<N>(rhs);
+
             if( rhs > element_ )
             {
                 element_ = N - (rhs - element_);
+            }
+            else
+            {
+                element_ -= rhs;
             }
 
             return *this;
         }
 
-        template <u64 N>
-        int_mod<N> &int_mod<N>::operator*=(u64 const rhs) noexcept
+        template <s64 N>
+        int_mod<N> &int_mod<N>::operator*=(s64 rhs) noexcept
         {
+            rhs = impl_details::standard_modulo<N>(rhs);
+
+            if( INT64_MAX / rhs < element_ )
+            {   // Signed integer overflow is UB
+                s64 old_element = element_;
+                while( INT64_MAX / rhs < element_ )
+                {
+                    element_ += old_element;
+                    element_ %= N;
+                    rhs -= 1;
+                }
+            }
+
             element_ *= rhs;
             element_ %= N;
 
             return *this;
         }
 
-        template <u64 N>
-        int_mod<N> &int_mod<N>::operator/=(u64 const rhs)
+        template <s64 N>
+        int_mod<N> &int_mod<N>::operator/=(s64 rhs)
         {
+            rhs = impl_details::standard_modulo<N>(rhs);
             try
             {
-                element_ *= impl_details::inverse_of<N>(rhs);
-                element_ %= N;
+                rhs = impl_details::inverse_of<N>(rhs);
             }
             catch( std::invalid_argument const & )
             {
                 throw;
             }
 
+            if( INT64_MAX / rhs < element_ )
+            {   // Signed integer overflow is UB
+                s64 old_element = element_;
+                while( INT64_MAX / rhs < element_ )
+                {
+                    element_ += old_element;
+                    element_ %= N;
+                    rhs -= 1;
+                }
+            }
+            
+            element_ *= rhs;
+            element_ %= N;
+
             return *this;
         }
 
-        template <u64 N>
-        int_mod<N> &int_mod<N>::operator%=(u64 const rhs)
+        template <s64 N>
+        int_mod<N> &int_mod<N>::operator%=(s64 rhs)
         {
             if( rhs != 0 )
             {
@@ -539,28 +581,32 @@ namespace math_nerd
 
         // Comparison operators
         // int_mod<N> versions
-        template <u64 N>
+        template <s64 N>
         constexpr bool int_mod<N>::operator==(int_mod<N> const rhs) const noexcept
         {
             return element_ == rhs.value();
         }
 
-        template <u64 N>
+        template <s64 N>
         constexpr bool int_mod<N>::operator!=(int_mod<N> const rhs) const noexcept
         {
             return element_ != rhs.value();
         }
 
-        // u64 versions
-        template <u64 N>
-        constexpr bool int_mod<N>::operator==(u64 const rhs) const noexcept
+        // s64 versions
+        template <s64 N>
+        constexpr bool int_mod<N>::operator==(s64 rhs) const noexcept
         {
+            rhs = impl_details::standard_modulo<N>(rhs);
+
             return element_ == rhs;
         }
 
-        template <u64 N>
-        constexpr bool int_mod<N>::operator!=(u64 const rhs) const noexcept
+        template <s64 N>
+        constexpr bool int_mod<N>::operator!=(s64 rhs) const noexcept
         {
+            rhs = impl_details::standard_modulo<N>(rhs);
+
             return element_ != rhs;
         }
 
@@ -569,7 +615,7 @@ namespace math_nerd
         /** \fn constexpr constexpr friend int_mod<N> operator+(int_mod<N> lhs, int_mod<N> rhs) noexcept
             \brief Returns the result of adding two int_mod<N>.
          */
-        template <u64 N>
+        template <s64 N>
         constexpr int_mod<N> operator+(int_mod<N> lhs, int_mod<N> rhs) noexcept
         {
             lhs += rhs;
@@ -579,7 +625,7 @@ namespace math_nerd
         /** \fn constexpr friend int_mod<N> operator-(int_mod<N> lhs, int_mod<N> rhs) noexcept
             \brief Returns the result of subtracting two int_mod<N>.
          */
-        template <u64 N>
+        template <s64 N>
         constexpr int_mod<N> operator-(int_mod<N> lhs, int_mod<N> rhs) noexcept
         {
             if( lhs.value() < rhs.value() )
@@ -597,7 +643,7 @@ namespace math_nerd
         /** \fn constexpr friend int_mod<N> operator*(int_mod<N> lhs, int_mod<N> rhs) noexcept
             \brief Returns the result of multiplying two int_mod<N>.
          */
-        template <u64 N>
+        template <s64 N>
         constexpr int_mod<N> operator*(int_mod<N> lhs, int_mod<N> rhs) noexcept
         {
             lhs *= rhs;
@@ -608,7 +654,7 @@ namespace math_nerd
         /** \fn constexpr friend int_mod<N> operator/(int_mod<N> lhs, int_mod<N> rhs)
             \brief Returns the result of dividing two int_mod<N>. Throws std::invalid_argument if rhs is not invertible.
          */
-        template <u64 N>
+        template <s64 N>
         int_mod<N> operator/(int_mod<N> lhs, int_mod<N> rhs)
         {
             try
@@ -626,7 +672,7 @@ namespace math_nerd
         /** \fn constexpr friend int_mod<N> operator%(int_mod<N> lhs, int_mod<N> rhs)
             \brief Returns the remainder when dividing two int_mod<N>. Throws std::invalid_argument if rhs is zero.
          */
-        template <u64 N>
+        template <s64 N>
         int_mod<N> operator%(int_mod<N> lhs, int_mod<N> rhs)
         {
             try
@@ -641,23 +687,23 @@ namespace math_nerd
             return lhs;
         }
 
-        // Right-u64 versions
-        /** \fn constexpr constexpr friend int_mod<N> operator+(int_mod<N> lhs, u64 const rhs) noexcept
-            \brief Returns the result of adding int_mod<N> and u64.
+        // Right-s64 versions
+        /** \fn constexpr constexpr friend int_mod<N> operator+(int_mod<N> lhs, s64 rhs) noexcept
+            \brief Returns the result of adding int_mod<N> and s64.
          */
-        template <u64 N>
-        constexpr int_mod<N> operator+(int_mod<N> lhs, u64 const rhs) noexcept
+        template <s64 N>
+        constexpr int_mod<N> operator+(int_mod<N> lhs, s64 rhs) noexcept
         {
             lhs += rhs;
 
             return lhs;
         }
 
-        /** \fn constexpr constexpr friend int_mod<N> operator-(int_mod<N> lhs, u64 const rhs) noexcept
-            \brief Returns the result of subtracting int_mod<N> by u64.
+        /** \fn constexpr constexpr friend int_mod<N> operator-(int_mod<N> lhs, s64 rhs) noexcept
+            \brief Returns the result of subtracting int_mod<N> by s64.
          */
-        template <u64 N>
-        constexpr int_mod<N> operator-(int_mod<N> lhs, u64 const rhs) noexcept
+        template <s64 N>
+        constexpr int_mod<N> operator-(int_mod<N> lhs, s64 rhs) noexcept
         {
             if( lhs.value() < (rhs % N) )
             {
@@ -671,22 +717,22 @@ namespace math_nerd
             }
         }
 
-        /** \fn constexpr constexpr friend int_mod<N> operator*(int_mod<N> lhs, u64 const rhs) noexcept
-            \brief Returns the result of multiplying int_mod<N> by u64.
+        /** \fn constexpr constexpr friend int_mod<N> operator*(int_mod<N> lhs, s64 rhs) noexcept
+            \brief Returns the result of multiplying int_mod<N> by s64.
          */
-        template <u64 N>
-        constexpr int_mod<N> operator*(int_mod<N> lhs, u64 const rhs) noexcept
+        template <s64 N>
+        constexpr int_mod<N> operator*(int_mod<N> lhs, s64 rhs) noexcept
         {
             lhs *= rhs;
 
             return lhs;
         }
 
-        /** \fn constexpr friend int_mod<N> operator/(int_mod<N> lhs, u64 const rhs)
-            \brief Returns the result of dividing int_mod<N> by u64. Throws std::invalid_argument if rhs is not invertible.
+        /** \fn constexpr friend int_mod<N> operator/(int_mod<N> lhs, s64 rhs)
+            \brief Returns the result of dividing int_mod<N> by s64. Throws std::invalid_argument if rhs is not invertible.
          */
-        template <u64 N>
-        int_mod<N> operator/(int_mod<N> lhs, u64 const rhs)
+        template <s64 N>
+        int_mod<N> operator/(int_mod<N> lhs, s64 rhs)
         {
             try
             {
@@ -700,11 +746,11 @@ namespace math_nerd
             return lhs;
         }
 
-        /** \fn constexpr friend int_mod<N> operator%(int_mod<N> lhs, u64 const rhs)
-            \brief Returns the remainder when dividing int_mod<N> by u64. Throws std::invalid_argument if rhs is zero.
+        /** \fn constexpr friend int_mod<N> operator%(int_mod<N> lhs, s64 rhs)
+            \brief Returns the remainder when dividing int_mod<N> by s64. Throws std::invalid_argument if rhs is zero.
          */
-        template <u64 N>
-        int_mod<N> operator%(int_mod<N> lhs, u64 const rhs)
+        template <s64 N>
+        int_mod<N> operator%(int_mod<N> lhs, s64 rhs)
         {
             try
             {
@@ -718,23 +764,23 @@ namespace math_nerd
             return lhs;
         }
 
-        // Left-u64 versions
-        /** \fn constexpr constexpr friend int_mod<N> operator+(u64 const lhs, int_mod<N> rhs) noexcept
-            \brief Returns the result of adding int_mod<N> and u64.
+        // Left-s64 versions
+        /** \fn constexpr constexpr friend int_mod<N> operator+(s64 const lhs, int_mod<N> rhs) noexcept
+            \brief Returns the result of adding int_mod<N> and s64.
          */
-        template <u64 N>
-        constexpr int_mod<N> operator+(u64 const lhs, int_mod<N> rhs) noexcept
+        template <s64 N>
+        constexpr int_mod<N> operator+(s64 const lhs, int_mod<N> rhs) noexcept
         {
             rhs += lhs;
 
             return rhs;
         }
 
-        /** \fn constexpr constexpr friend int_mod<N> operator-(u64 const lhs, int_mod<N> rhs) noexcept
-            \brief Returns the result of subtracting int_mod<N> by u64.
+        /** \fn constexpr constexpr friend int_mod<N> operator-(s64 const lhs, int_mod<N> rhs) noexcept
+            \brief Returns the result of subtracting int_mod<N> by s64.
          */
-        template <u64 N>
-        constexpr int_mod<N> operator-(u64 const lhs, int_mod<N> rhs) noexcept
+        template <s64 N>
+        constexpr int_mod<N> operator-(s64 const lhs, int_mod<N> rhs) noexcept
         {
             if( (lhs % N) < rhs.value() )
             {
@@ -748,22 +794,22 @@ namespace math_nerd
             }
         }
 
-        /** \fn constexpr constexpr friend int_mod<N> operator*(u64 const lhs, int_mod<N> rhs) noexcept
-            \brief Returns the result of multiplying int_mod<N> by u64.
+        /** \fn constexpr constexpr friend int_mod<N> operator*(s64 const lhs, int_mod<N> rhs) noexcept
+            \brief Returns the result of multiplying int_mod<N> by s64.
          */
-        template <u64 N>
-        constexpr int_mod<N> operator*(u64 const lhs, int_mod<N> rhs) noexcept
+        template <s64 N>
+        constexpr int_mod<N> operator*(s64 const lhs, int_mod<N> rhs) noexcept
         {
             rhs *= lhs;
 
             return rhs;
         }
 
-        /** \fn constexpr friend int_mod<N> operator/(u64 const lhs, int_mod<N> rhs)
-            \brief Returns the result of dividing int_mod<N> by u64. Throws std::invalid_argument if rhs is not invertible.
+        /** \fn constexpr friend int_mod<N> operator/(s64 const lhs, int_mod<N> rhs)
+            \brief Returns the result of dividing int_mod<N> by s64. Throws std::invalid_argument if rhs is not invertible.
          */
-        template <u64 N>
-        int_mod<N> operator/(u64 const lhs, int_mod<N> rhs)
+        template <s64 N>
+        int_mod<N> operator/(s64 const lhs, int_mod<N> rhs)
         {
             try
             {
@@ -777,11 +823,11 @@ namespace math_nerd
             return lhs;
         }
 
-        /** \fn constexpr friend int_mod<N> operator%(u64 const lhs, int_mod<N> rhs)
-            \brief Returns the remainder when dividing int_mod<N> by u64. Throws std::invalid_argument if rhs is zero.
+        /** \fn constexpr friend int_mod<N> operator%(s64 const lhs, int_mod<N> rhs)
+            \brief Returns the remainder when dividing int_mod<N> by s64. Throws std::invalid_argument if rhs is zero.
          */
-        template <u64 N>
-        int_mod<N> operator%(u64 const lhs, int_mod<N> rhs)
+        template <s64 N>
+        int_mod<N> operator%(s64 const lhs, int_mod<N> rhs)
         {
             try
             {
@@ -796,14 +842,14 @@ namespace math_nerd
         }
 
         // I/O operators
-        template <u64 N>
+        template <s64 N>
         std::ostream &operator<<(std::ostream &os, int_mod<N> const &rhs)
         {
             os << rhs.element_;
             return os;
         }
 
-        template <u64 N>
+        template <s64 N>
         std::istream &operator>>(std::istream &is, int_mod<N> &rhs)
         {
             is >> rhs.element_;
@@ -817,10 +863,10 @@ namespace math_nerd
          */
         namespace impl_details
         {
-            /** \fn constexpr u64 gcd(u64 const a, u64 const b) noexcept
+            /** \fn constexpr s64 gcd(s64 const a, s64 const b) noexcept
                 \brief Computes the greatest common divisor of two integers using the Euclidean algorithm.
              */
-            constexpr u64 gcd(u64 const a, u64 const b) noexcept
+            constexpr s64 gcd(s64 const a, s64 const b) noexcept
             {
                 if( b == 0 )
                 {
@@ -830,12 +876,12 @@ namespace math_nerd
                 return gcd(b, a%b);
             }
 
-            /** \fn constexpr u64 euler_phi(u64 const n) noexcept
+            /** \fn constexpr s64 euler_phi(s64 const n) noexcept
                 \brief Computes the Euler phi of an integer.
              */
-            constexpr u64 euler_phi(u64 const n) noexcept
+            constexpr s64 euler_phi(s64 const n) noexcept
             {
-                u64 res = 1;
+                s64 res = 1;
 
                 for( auto i = 2u; i < n; ++i )
                 {
@@ -848,60 +894,77 @@ namespace math_nerd
                 return res;
             }
 
-            /** \fn constexpr u64 ipow(u64 const a, u64 const b, u64 const N)
-                \brief Computes a to the power b modulo N.
+            /** \fn constexpr s64 ipow(s64 const base, s64 const exponent, s64 const N)
+                \brief Computes base to the power exponent modulo N.
                 \details This is a divide-and-conquer algorithm which takes advantage of integer division to divide the exponent in
                          half at each level of recursion until an exponent of 0 is reached, for which it returns 1.
                          It then multiplies the results together while taking remainders after division by N.
              */
-            constexpr u64 ipow(u64 const a, u64 const b, u64 const N)
+            constexpr s64 ipow(s64 const base, s64 const exponent, s64 const N)
             {
-                if( b == 0 )
+                if( exponent < 0 )
+                {
+                    std::invalid_argument("Exponent must be non-negative.");
+                }
+
+                if( base == 0 )
+                {
+                    return 0;
+                }
+                else if( exponent == 0 )
                 {
                     return 1;
                 }
 
-                u64 tmp = ipow(a, b / 2, N);
+                s64 tmp = ipow(base, exponent / 2, N);
 
-                if( b % 2 == 0 )
+                if( exponent % 2 == 0 )
                 {
                     return (tmp * tmp) % N;
                 }
                 else
                 {
-                    return (a * tmp * tmp) % N;
+                    return (base * tmp * tmp) % N;
                 }
             }
 
-            /** \fn constexpr u64 inverse_of(u64 const n) noexcept
+            /** \fn constexpr s64 inverse_of(s64 const n) noexcept
                 \brief Computes the inverse of an integer modulo N. Throws std::invalid_argument if not invertible.
                 \brief By Euler's theorem, \f$a^{\phi\left(N\right)}\equiv a\,\left(\text{mod}\,N\right)\f$ for \f$\text{gcd}\left(a,N\right)=1,\f$
                        which implies that that \f$a^{\phi\left(N\right)-1}\equiv 1\,\left(\text{mod}\,N\right)\f$ under the same condition.
              */
-            template <u64 N>
-            constexpr u64 inverse_of(u64 const n)
+            template <s64 N>
+            constexpr s64 inverse_of(s64 const n)
             {
-                static u64 phi = 0;
+                static s64 phi = 0;
 
                 if( phi == 0 )
                 {
                     if constexpr(N < 9901)
                     {   // constexpr works for N < 9901 with MSVC.
-                        constexpr static u64 phi_const = impl_details::euler_phi(N);
+                        constexpr static s64 phi_const = euler_phi(N);
                         phi = phi_const;
                     }
                     else
                     {   // Otherwise, we must calculate at runtime.
-                        phi = impl_details::euler_phi(N);
+                        phi = euler_phi(N);
                     }
                 }
 
-                u64 inv = 0;
-                u64 d = gcd(n, N);
+                s64 inv = 0;
+                s64 d = gcd(n, N);
 
                 if( d == 1 )
                 {
-                    inv = impl_details::ipow(n, phi - 1, N);
+                    try
+                    {
+                        inv = ipow(n % N, phi - 1, N);
+                    }
+                    catch( std::invalid_argument const & )
+                    {
+                        throw;
+                    }
+                    
                 }
                 else
                 {
@@ -917,6 +980,21 @@ namespace math_nerd
                 }
 
                 return inv;
+            }
+
+            template<s64 N>
+            constexpr s64 standard_modulo(s64 rhs)
+            {
+                if( rhs < 0 )
+                {
+                    rhs += (-(rhs / N) + 1)*N;
+                }
+                else if( rhs > N )
+                {
+                    rhs %= N;
+                }
+
+                return rhs;
             }
 
         } // namespace impl_details
