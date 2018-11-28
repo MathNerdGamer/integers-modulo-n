@@ -23,8 +23,8 @@ SOFTWARE.
 */
 
 #pragma once
-#ifndef INT_MOD_H
-#define INT_MOD_H
+#ifndef MATH_NERD_INT_MOD_H
+#define MATH_NERD_INT_MOD_H
 
 /** \file int_mod.h
     \brief std::int64_t wrapper for arithmetic modulo N.
