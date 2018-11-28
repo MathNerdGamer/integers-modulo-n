@@ -57,6 +57,7 @@ namespace math_nerd
         class int_mod
         {
             static_assert(N > 1, "Modulus N of int_mod<N> must be at least 2.");
+            static_assert(N <= 1000000000, "Modulus N > 1000000000 of int_mod<N> are currently not supported due to lack of overflow checks.");
 
             private:
                 /** \property s64 element_
@@ -483,14 +484,6 @@ namespace math_nerd
         {
             rhs = impl_details::standard_modulo<N>(rhs);
 
-            if constexpr( INT64_MAX / 2 <= N )
-            {   // Overflow check not needed for small modulus.
-                if( INT64_MAX - rhs < element_ )
-                {   // Signed integer overflow is UB
-                    rhs -= N; // Same as subtracting by 0 modulo N.
-                }
-            }
-
             element_ += rhs;
 
             element_ %= N;
@@ -520,20 +513,6 @@ namespace math_nerd
         {
             rhs = impl_details::standard_modulo<N>(rhs);
 
-            if constexpr( INT64_MAX / N <= N )
-            {   // Overflow check not needed for small modulus.
-                if( INT64_MAX / rhs < element_ )
-                {   // Signed integer overflow is UB
-                    s64 old_element = element_;
-                    while( INT64_MAX / rhs < element_ )
-                    {
-                        element_ += old_element;
-                        element_ %= N;
-                        rhs -= 1;
-                    }
-                }
-            }
-
             element_ *= rhs;
             element_ %= N;
 
@@ -544,6 +523,7 @@ namespace math_nerd
         int_mod<N> &int_mod<N>::operator/=(s64 rhs)
         {
             rhs = impl_details::standard_modulo<N>(rhs);
+
             try
             {
                 rhs = impl_details::inverse_of<N>(rhs);
@@ -551,20 +531,6 @@ namespace math_nerd
             catch( std::invalid_argument const & )
             {
                 throw;
-            }
-
-            if constexpr( INT64_MAX / N <= N )
-            {   // Overflow check not needed for small modulus.
-                if( INT64_MAX / rhs < element_ )
-                {   // Signed integer overflow is UB
-                    s64 old_element = element_;
-                    while( INT64_MAX / rhs < element_ )
-                    {
-                        element_ += old_element;
-                        element_ %= N;
-                        rhs -= 1;
-                    }
-                }
             }
             
             element_ *= rhs;
@@ -714,16 +680,9 @@ namespace math_nerd
         template <s64 N>
         constexpr int_mod<N> operator-(int_mod<N> lhs, s64 rhs) noexcept
         {
-            if( lhs.value() < (rhs % N) )
-            {
+            lhs -= rhs;
 
-                return (rhs % N) - lhs.value();
-            }
-            else
-            {
-                lhs -= rhs;
-                return lhs;
-            }
+            return lhs;
         }
 
         /** \fn constexpr constexpr friend int_mod<N> operator*(int_mod<N> lhs, s64 rhs) noexcept
