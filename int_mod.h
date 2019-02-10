@@ -76,7 +76,7 @@ namespace math_nerd
             {
                 s64 res = 1;
 
-                for( auto i = 2u; i < n; ++i )
+                for( auto i = 2; i < n; ++i )
                 {
                     if( gcd(i, n) == 1 )
                     {
