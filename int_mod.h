@@ -149,7 +149,7 @@ namespace math_nerd
                     {
                         throw;
                     }
-                    return impl_details::inverse_of<N>(element_);
+                    return inv;
                 }
 
                 /** \name Increment/Decrement operators */
