@@ -805,7 +805,7 @@ namespace math_nerd
             {
                 if( exponent < 0 )
                 {
-                    std::invalid_argument("Exponent must be non-negative.");
+                    throw std::invalid_argument{ "Exponent must be non-negative." };
                 }
 
                 if( base == 0 || base == 1 || exponent == 1 )
