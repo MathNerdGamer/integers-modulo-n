@@ -879,6 +879,9 @@ namespace math_nerd
             template <s64 N>
             s64 standard_modulo(s64 rhs)
             {
+                if( rhs % N == 0 ) return 0;
+                // If rhs is a multiple of N, return 0.
+                
                 /*
                     For the negative case:
                     rhs / N ~ rhs (integer division)
