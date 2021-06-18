@@ -1,6 +1,6 @@
 #include <sstream>
 
-#include "math_nerd/int_mod.h"
+#include <math_nerd/int_mod.h>
 
 #define CATCH_DEFINE_MAIN
 #include "catch.hpp"
