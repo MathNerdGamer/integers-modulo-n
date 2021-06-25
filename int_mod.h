@@ -76,7 +76,7 @@ namespace math_nerd
                          Throws std::invalid_argument if exponent is negative.
              */
             template<s64 N>
-            constexpr auto ipow(s64 const base, s64 const exponent)->s64;
+            constexpr auto ipow(s64 const base, s64 const exponent) -> s64;
 
             /** \fn auto inverse_of(s64 const n) -> s64
                 \brief Computes the inverse of an integer modulo N. Throws std::invalid_argument if not invertible.
@@ -84,14 +84,14 @@ namespace math_nerd
                        which implies that that \f$a^{\phi\left(N\right)-1}\equiv a^{-1}\ \left(\mathrm{mod}\ N\right)\f$ under the same condition.
              */
             template <s64 N>
-            constexpr auto inverse_of(s64 const n)->s64;
+            constexpr auto inverse_of(s64 const n) -> s64;
 
             /** \fn auto standard_modulo(s64 rhs) -> s64
                 \brief Returns the standard form of rhs modulo N. The standard form is the integer
                        between 0 and N-1 (inclusive) which is equivalent to rhs modulo N.
              */
             template <s64 N>
-            constexpr auto standard_modulo(s64 rhs)->s64;
+            constexpr auto standard_modulo(s64 rhs) -> s64;
 
         } // namespace impl_details
 
@@ -212,7 +212,7 @@ namespace math_nerd
             /** \fn constexpr auto operator/=(int_mod<N> const rhs) -> int_mod<N> &
                 \brief Divides rhs, if invertible modulo N, from element_ and reduces modulo N. Throws std::invalid_argument if rhs is not invertible.
              */
-            constexpr auto operator/=(int_mod<N> const rhs)->int_mod<N> &;
+            constexpr auto operator/=(int_mod<N> const rhs) -> int_mod<N> &;
 
             /** \fn constexpr auto operator=(s64 rhs) noexcept -> int_mod<N> &
                 \brief Assigns rhs to element_ and reduces modulo N.
@@ -237,7 +237,7 @@ namespace math_nerd
             /** \fn constexpr auto operator/=(s64 rhs) -> int_mod<N> &
                 \brief Divides rhs, if invertible modulo N, from element_ and reduces modulo N. Throws std::invalid_argument if rhs is not invertible.
              */
-            constexpr auto operator/=(s64 rhs)->int_mod<N> &;
+            constexpr auto operator/=(s64 rhs) -> int_mod<N> &;
 
 
             /** \name Comparison operators */
