@@ -95,7 +95,6 @@ namespace math_nerd
 
         } // namespace impl_details
 
-
         /** \class int_mod<N>
             \brief Wrapper for 64-bit integer for arithmetic modulo N.
          */
@@ -731,7 +730,7 @@ namespace math_nerd
                 }
                 else
                 {   // Circumventing some overflows by modding by N before second multiplication by tmp.
-                    return standard_modulo<N>((base * tmp) % N * tmp);
+                    return standard_modulo<N>(((base * tmp) % N) * tmp);
                 }
             }
 
